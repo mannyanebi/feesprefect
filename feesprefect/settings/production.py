@@ -1,6 +1,6 @@
 # flake8: noqa
 
-from .base import *
+from .base import *  # noqa
 
 # ==============================================================================
 # SECURITY SETTINGS
