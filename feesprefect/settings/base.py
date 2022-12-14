@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+# Monkey patching with Django Stubs
+import django_stubs_ext
 from decouple import Csv, config
+
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,9 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party packages/apps
+    "djmoney",
     # feesprefect apps
     "feesprefect.apps.core",
     "feesprefect.apps.accounts",
+    "feesprefect.apps.school",
 ]
 
 MIDDLEWARE = [
@@ -235,3 +242,4 @@ JAZZMIN_SETTINGS = {
 # ==============================================================================
 
 FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
+AUTH_USER_MODEL = "accounts.FeesprefectAdmin"
