@@ -4,12 +4,12 @@ from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
 from moneyed.classes import NGN
 
-from feesprefect.apps.core.models import TimestampMixin
+from feesprefect.apps.core.models import TimestampMixin, UUIDMixin
 
 # Create your models here.
 
 
-class Student(TimestampMixin, models.Model):
+class Student(UUIDMixin, TimestampMixin, models.Model):
     name = models.CharField(_("Student Name"), max_length=255, blank=False, null=False)
     academic_class = models.ForeignKey(
         "school.AcademicClass",
@@ -115,7 +115,7 @@ class SchoolFee(TimestampMixin, models.Model):
         verbose_name_plural = "School fees"
 
 
-class SchoolFeesPayment(TimestampMixin, models.Model):
+class SchoolFeesPayment(UUIDMixin, TimestampMixin, models.Model):
     student = models.ForeignKey(
         "school.Student",
         verbose_name=_("Student"),

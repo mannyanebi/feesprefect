@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third-party packages/apps
     "djmoney",
+    "import_export",
     # feesprefect apps
     "feesprefect.apps.core",
     "feesprefect.apps.accounts",
@@ -237,9 +238,15 @@ JAZZMIN_SETTINGS = {
         "auth.group": "vertical_tabs",
     },
 }
+
+# Django Import Export
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+IMPORT_EXPORT_SKIP_ADMIN_LOG = True
+
 # ==============================================================================
 # FIRST-PARTY SETTINGS
 # ==============================================================================
 
 FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
+
 AUTH_USER_MODEL = "accounts.FeesprefectAdmin"
