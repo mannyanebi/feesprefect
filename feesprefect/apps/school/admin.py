@@ -1,18 +1,13 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
+from feesprefect.apps.school.resources import StudentResource
+
 from . import models
 
 # Register your models here.
 
 
-# @admin.register(models.Student)
-# class StudentAdmin(admin.ModelAdmin):
-#     list_display = (
-#         "name",
-#         "academic_class",
-#         "created_by",
-#     )
 @admin.register(models.Student)
 class StudentAdmin(ImportExportModelAdmin):
     list_display = (
@@ -20,7 +15,10 @@ class StudentAdmin(ImportExportModelAdmin):
         "academic_class",
         "created_by",
     )
+    list_filter = ("academic_class",)
+    search_fields = ("academic_class__name",)
     readonly_fields = ("uuid",)
+    resource_classes = (StudentResource,)
 
 
 @admin.register(models.AcademicClass)
@@ -45,6 +43,7 @@ class SchoolFeeAdmin(admin.ModelAdmin):
     list_display = (
         "academic_class",
         "session",
+        "term",
         "amount",
     )
 

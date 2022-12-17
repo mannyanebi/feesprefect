@@ -70,6 +70,7 @@ disable=missing-class-docstring,
         unused-wildcard-import,
         import-outside-toplevel,
         too-many-ancestors,
+        too-few-public-methods,
 
 
 

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     # third-party packages/apps
     "djmoney",
     "import_export",
+    "rest_framework",
+    "drf_yasg",
     # feesprefect apps
     "feesprefect.apps.core",
     "feesprefect.apps.accounts",
@@ -242,6 +244,18 @@ JAZZMIN_SETTINGS = {
 # Django Import Export
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 IMPORT_EXPORT_SKIP_ADMIN_LOG = True
+
+# Rest Framework
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAdminUser",
+    ],
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+        # Any other renders
+    ),
+}
 
 # ==============================================================================
 # FIRST-PARTY SETTINGS

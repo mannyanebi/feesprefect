@@ -75,6 +75,9 @@ class AcademicSession(TimestampMixin, models.Model):
         related_name="academic_sessions_created",
     )
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         verbose_name = "Academic session"
         verbose_name_plural = "Academic sessions"
