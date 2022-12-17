@@ -250,11 +250,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAdminUser",
     ],
-    "DEFAULT_RENDERER_CLASSES": (
-        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
-        # Any other renders
-    ),
+    # "DEFAULT_RENDERER_CLASSES": (
+    #     "rest_framework.renderers.BrowsableAPIRenderer",
+    #     "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    #     # "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+    #     # Any other renders
+    # ),
 }
 
 # ==============================================================================
