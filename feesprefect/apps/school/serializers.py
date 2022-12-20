@@ -49,12 +49,7 @@ class StudentCreateSerializer(serializers.ModelSerializer):
 
     academic_class = AcademicClassCreateSerializer(required=False)
 
-    # def is_valid(self, *, raise_exception=False):
-    #     print("is_valid", self)
-    #     return super().is_valid(raise_exception=raise_exception)
-
     def create(self, validated_data):
-        print("validated_data", validated_data)
         # hook and intercept the validated_data to fetch the Academic Class model object
         try:
 

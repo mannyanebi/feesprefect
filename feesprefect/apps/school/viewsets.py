@@ -1,6 +1,6 @@
-from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import exceptions, viewsets
 
+from feesprefect.apps.school.mixins import FromCamelCase
 from feesprefect.apps.school.models import AcademicClass, Student
 from feesprefect.apps.school.pagination import StudentsListPagination
 from feesprefect.apps.school.serializers import (
@@ -12,15 +12,14 @@ from feesprefect.apps.school.serializers import (
 # Create your views here.
 
 
-class StudentViewSet(viewsets.ModelViewSet):
+class StudentViewSet(FromCamelCase, viewsets.ModelViewSet):
     """
     The Student ModelViewSet with all CRUD actions. We prefer to use UUID field for lookup
     """
 
-    queryset = Student.objects.all()
+    queryset = Student.objects.all().order_by("id")
     pagination_class = StudentsListPagination
     lookup_field = "uuid"
-    renderer_classes = [CamelCaseJSONRenderer]
     # lookup_value_regex = r"^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$" # pylint: disable=line-too-long
 
     def get_serializer_class(self):

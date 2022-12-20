@@ -4,7 +4,7 @@ multi_line_output = 3
 line_length = 88
 default_section = "THIRDPARTY"
 known_first_party = "feesprefect"
-known_third_party = ["decouple", "django", "django_stubs_ext", "djangorestframework_camel_case", "djmoney", "drf_yasg", "import_export", "moneyed", "rest_framework"]
+known_third_party = ["decouple", "django", "django_stubs_ext", "djmoney", "drf_yasg", "import_export", "moneyed", "rest_framework"]
 
 [tool.black]
 line-length = 88
