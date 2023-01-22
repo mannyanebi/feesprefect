@@ -20,3 +20,17 @@ class FromCamelCase:
 
 # Reference
 # https://www.hacksoft.io/blog/how-to-deal-with-cases-mismatch-between-django-and-react
+
+
+# HttpRequestType = NewType('HttpRequestType', HttpRequest)
+
+# class RequestType(TypedDict):
+#     request: HttpRequestType
+
+# class RequestUserType(TypedDict):
+#     self: RequestType
+class PerformCreateWithAdmin:
+    def perform_create(self, serializer):
+        serializer.save(
+            created_by=self.request.user  # pylint: disable=no-member # type: ignore
+        )
