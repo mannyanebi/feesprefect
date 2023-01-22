@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+# Monkey patching with Django Stubs
+import django_stubs_ext
 from decouple import Csv, config
+
+django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,9 +49,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party packages/apps
+    "djmoney",
+    "import_export",
+    "rest_framework",
+    "drf_yasg",
     # feesprefect apps
     "feesprefect.apps.core",
     "feesprefect.apps.accounts",
+    "feesprefect.apps.school",
 ]
 
 MIDDLEWARE = [
@@ -230,8 +240,34 @@ JAZZMIN_SETTINGS = {
         "auth.group": "vertical_tabs",
     },
 }
+
+# Django Import Export
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+IMPORT_EXPORT_SKIP_ADMIN_LOG = True
+
+# Rest Framework
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAdminUser",
+    ],
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+        # Any other renders
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        # If you use MultiPartFormParser or FormParser, we also have a camel case version
+        # 'djangorestframework_camel_case.parser.CamelCaseFormParser',
+        # 'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+        # Any other parsers
+    ),
+}
+
 # ==============================================================================
 # FIRST-PARTY SETTINGS
 # ==============================================================================
 
 FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
+
+AUTH_USER_MODEL = "accounts.FeesprefectAdmin"

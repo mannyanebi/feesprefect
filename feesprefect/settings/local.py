@@ -1,6 +1,4 @@
-# flake8: noqa
-
-from .base import *  # noqa
+from .base import *  # noqa, pylint: disable=wildcard-import, unused-wildcard-import
 
 INSTALLED_APPS += ["debug_toolbar"]
 

@@ -69,6 +69,8 @@ disable=missing-class-docstring,
         wildcard-import,
         unused-wildcard-import,
         import-outside-toplevel,
+        too-many-ancestors,
+        too-few-public-methods,
 
 
 
