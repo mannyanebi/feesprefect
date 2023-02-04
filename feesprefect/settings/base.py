@@ -267,6 +267,6 @@ REST_FRAMEWORK = {
 # FIRST-PARTY SETTINGS
 # ==============================================================================
 
-FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
+# FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
 
 AUTH_USER_MODEL = "accounts.FeesprefectAdmin"
