@@ -15,8 +15,10 @@ from .base import *  # noqa
 # ALLOWED_HOSTS: List[str] = cast(List[str], config("ALLOWED_HOSTS", cast=Csv()))
 ALLOWED_HOSTS: List[str] = []
 
-STATICFILES_DIRS = [BASE_DIR / "feesprefect" / "static"]
-print("STATICFILES_DIRS", STATICFILES_DIRS)
+print("BASE_DIR", BASE_DIR)
+
+STATICFILES_DIRS = ["/opt/render/project/src/static"]
+# print("STATICFILES_DIRS", STATICFILES_DIRS)
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
