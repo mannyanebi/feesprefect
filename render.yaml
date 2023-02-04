@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn feesprefect.wsgi:application"
     envVars:
       - key: IS_FEESPREFECT_PROD_ENVIRONMENT
         value: True
