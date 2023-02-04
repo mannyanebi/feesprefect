@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: feesprefect-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi:application"
+    envVars:
+      - key: IS_FEESPREFECT_PROD_ENVIRONMENT
+        value: False
+      - key: DEBUG
+        value: True
+      - key: SECRET_KEY
+        value: django-insecure-tb(+xav!)94^xxms+61*ar=@=8d5)bduz(amc=*b5me20=we!!
+      - key: PYTHON_VERSION
+        value: 3.9.5
+      - key: WEB_CONCURRENCY
+        value: 4

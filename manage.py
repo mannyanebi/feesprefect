@@ -3,10 +3,24 @@
 import os
 import sys
 
+from decouple import config
+
 
 def main():
+    IS_FEESPREFECT_PROD_ENVIRONMENT = config(  # pylint: disable = invalid-name
+        "IS_FEESPREFECT_PROD_ENVIRONMENT", default=False, cast=bool
+    )
+
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "feesprefect.settings.local")
+
+    if IS_FEESPREFECT_PROD_ENVIRONMENT:
+        os.environ.setdefault(
+            "DJANGO_SETTINGS_MODULE", "feesprefect.settings.production"
+        )
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "feesprefect.settings.local")
+
+    print("IS_FEESPREFECT_PROD_ENVIRONMENT", IS_FEESPREFECT_PROD_ENVIRONMENT)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
