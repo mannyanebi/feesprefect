@@ -6,10 +6,10 @@ services:
     buildCommand: "./build.sh"
     startCommand: "gunicorn feesprefect.wsgi:application"
     envVars:
-      - key: IS_FEESPREFECT_PROD_ENVIRONMENT
-        value: True
+      - key: FEESPREFECT_ENVIRONMENT
+        value: production
       - key: DEBUG
-        value: True
+        value: False
       - key: SECRET_KEY
         value: django-insecure-tb(+xav!)94^xxms+61*ar=@=8d5)bduz(amc=*b5me20=we!!
       - key: PYTHON_VERSION
