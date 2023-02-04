@@ -10,6 +10,8 @@ INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+print("STATICFILES_DIRS", STATICFILES_DIRS)
 
 # ==============================================================================
 # EMAIL SETTINGS
