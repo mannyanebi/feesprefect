@@ -1,4 +1,6 @@
+from djmoney.contrib.django_rest_framework import MoneyField
 from rest_framework import serializers
+from rest_framework.exceptions import APIException, NotFound, ValidationError
 
 from feesprefect.apps.school.models import (
     AcademicClass,
@@ -195,13 +197,52 @@ class ReadSchoolFeesPaymentSerializer(serializers.ModelSerializer):
 
 class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
     student = WriteStudentFKFieldSerializer()
-    school_fee = WriteSchoolFeeFKFieldSerializer()
+    amount_paid = MoneyField(max_digits=14, decimal_places=2)
+    # school_fee = WriteSchoolFeeFKFieldSerializer()
 
     class Meta:
         model = SchoolFeesPayment
         exclude = (
             "uuid",
+            "school_fee",
+            "is_payment_complete",
             "created_by",
             "created_at",
             "updated_at",
         )
+
+        extra_kwargs = {"amount_paid": {"required": True}}
+
+    def create(self, validated_data):
+        try:
+            student = validated_data.pop("student")
+            student_obj = Student.objects.select_related("academic_class").get(
+                uuid=student["uuid"]
+            )
+            school_fee = student_obj.academic_class.school_fees.get(
+                academic_class_id=student_obj.academic_class.id
+            )
+            validated_data.update({"student": student_obj, "school_fee": school_fee})
+            school_fee_payment = SchoolFeesPayment.objects.create(**validated_data)
+            return school_fee_payment
+        except Student.DoesNotExist as student_not_found:
+            raise NotFound("Student not found") from student_not_found
+
+    def update(self, instance: SchoolFeesPayment, validated_data):
+        if "student" in validated_data:
+            raise ValidationError("You can't update the student field for this record")
+        amount_paid = validated_data.pop("amount_paid")
+
+        school_fee: SchoolFee = instance.student.academic_class.school_fees.get(
+            academic_class_id=instance.student.academic_class.id
+        )
+        new_amount_paid = instance.amount_paid.amount + amount_paid
+
+        if new_amount_paid <= school_fee.amount.amount:
+            instance.amount_paid = new_amount_paid
+        else:
+            raise APIException(
+                detail="New total amount paid cannot be more than school fee total amount"
+            )
+
+        return super().update(instance, validated_data)
