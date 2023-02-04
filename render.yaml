@@ -7,7 +7,7 @@ services:
     startCommand: "gunicorn mysite.wsgi:application"
     envVars:
       - key: IS_FEESPREFECT_PROD_ENVIRONMENT
-        value: False
+        value: True
       - key: DEBUG
         value: True
       - key: SECRET_KEY
