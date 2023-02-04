@@ -71,6 +71,7 @@ disable=missing-class-docstring,
         import-outside-toplevel,
         too-many-ancestors,
         too-few-public-methods,
+        pointless-string-statement,
 
 
 

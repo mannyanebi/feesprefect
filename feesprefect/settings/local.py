@@ -1,4 +1,10 @@
+# Monkey patching with Django Stubs
+import django_stubs_ext
+
 from .base import *  # noqa, pylint: disable=wildcard-import, unused-wildcard-import
+
+django_stubs_ext.monkeypatch()
+
 
 INSTALLED_APPS += ["debug_toolbar"]
 
