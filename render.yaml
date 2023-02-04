@@ -2,6 +2,7 @@ services:
   - type: web
     name: feesprefect-backend
     env: python
+    plan: free
     buildCommand: "./build.sh"
     startCommand: "gunicorn mysite.wsgi:application"
     envVars:
