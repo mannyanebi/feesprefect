@@ -11,12 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from typing import List, cast
 
-# Monkey patching with Django Stubs
-import django_stubs_ext
 from decouple import Csv, config
-
-django_stubs_ext.monkeypatch()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,7 +33,9 @@ SECRET_KEY = config("SECRET_KEY", default="django-insecure$feesprefect.settings.
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+ALLOWED_HOSTS: List[str] = cast(
+    List[str], config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+)
 
 
 # Application definition
