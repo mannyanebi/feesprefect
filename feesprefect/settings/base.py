@@ -97,7 +97,7 @@ WSGI_APPLICATION = "feesprefect.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": BASE_DIR / "feesprefect.sqlite3",
     }
 }
 
@@ -149,11 +149,13 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR.parent.parent / "staticfiles"
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",

@@ -17,8 +17,7 @@ ALLOWED_HOSTS: List[str] = []
 
 print("BASE_DIR", BASE_DIR)
 
-STATICFILES_DIRS = ["/opt/render/project/src/static"]
-# print("STATICFILES_DIRS", STATICFILES_DIRS)
+# STATICFILES_DIRS = ["/opt/render/project/src/static"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
