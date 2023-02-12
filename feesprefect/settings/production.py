@@ -12,12 +12,8 @@ from .base import *  # noqa
 # ==============================================================================
 # CONFIG FOR RUNNING ON RENDER.COM
 # ==============================================================================
-# ALLOWED_HOSTS: List[str] = cast(List[str], config("ALLOWED_HOSTS", cast=Csv()))
+
 ALLOWED_HOSTS: List[str] = []
-
-print("BASE_DIR", BASE_DIR)
-
-# STATICFILES_DIRS = ["/opt/render/project/src/static"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
