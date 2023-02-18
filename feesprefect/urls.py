@@ -48,4 +48,7 @@ urlpatterns = [
         name="schema-redoc",
     ),
     path("api/v1/", include("feesprefect.apps.school.urls", namespace="school")),
+    path(
+        "api/v1/auth/", include("feesprefect.apps.accounts.urls", namespace="accounts")
+    ),
 ]
