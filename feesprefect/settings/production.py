@@ -12,7 +12,7 @@ from .base import *  # noqa
 # ==============================================================================
 # Config for Serving Static Files
 # ==============================================================================
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(3, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # ==============================================================================
 # CONFIG FOR RUNNING ON RENDER.COM
