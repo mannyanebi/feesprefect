@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # third-party packages/apps
     "djmoney",
     "import_export",
+    "corsheaders",
     "rest_framework",
     "drf_yasg",
     # feesprefect apps
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -268,6 +270,9 @@ REST_FRAMEWORK = {
         # Any other parsers
     ),
 }
+
+# CORS Policy
+CORS_ALLOW_ALL_ORIGINS = True
 
 # ==============================================================================
 # FIRST-PARTY SETTINGS

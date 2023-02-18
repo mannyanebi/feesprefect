@@ -18,7 +18,7 @@ class AdminLoginView(APIView):
             login(request, user)
             return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
         return Response(
-            {"message": "Invalid login credentials"}, status=status.HTTP_400_BAD_REQUEST
+            {"message": "Invalid login credentials"}, status=status.HTTP_404_NOT_FOUND
         )
 
 
