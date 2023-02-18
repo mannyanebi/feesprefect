@@ -10,13 +10,15 @@ from .base import *  # noqa
 
 
 # ==============================================================================
+# Config for Serving Static Files
+# ==============================================================================
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+# ==============================================================================
 # CONFIG FOR RUNNING ON RENDER.COM
 # ==============================================================================
-# ALLOWED_HOSTS: List[str] = cast(List[str], config("ALLOWED_HOSTS", cast=Csv()))
-ALLOWED_HOSTS: List[str] = []
 
-STATICFILES_DIRS = [BASE_DIR / "feesprefect" / "static"]
-print("STATICFILES_DIRS", STATICFILES_DIRS)
+ALLOWED_HOSTS: List[str] = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
