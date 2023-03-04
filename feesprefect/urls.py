@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 
 SchemaView = get_schema_view(
     openapi.Info(
@@ -27,6 +29,7 @@ SchemaView = get_schema_view(
     ),
     public=True,
     permission_classes=[permissions.IsAdminUser],
+    authentication_classes=[SessionAuthentication, BasicAuthentication],
 )
 
 urlpatterns = [
@@ -37,6 +40,7 @@ urlpatterns = [
         SchemaView.without_ui(cache_timeout=0),
         name="schema-json",
     ),
+    path("openapi/", TemplateView.as_view(template_name="swagger-ui/dist/index.html")),
     path(
         "docs/swagger/",
         SchemaView.with_ui("swagger", cache_timeout=0),
