@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import exceptions, viewsets
 
 from feesprefect.apps.school.mixins import PerformCreateWithAdmin
@@ -31,7 +32,14 @@ class StudentViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
     queryset = Student.objects.all().order_by("id")
     pagination_class = ListPagination
     lookup_field = "uuid"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["academic_class_id"]
     # lookup_value_regex = r"^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$" # pylint: disable=line-too-long
+
+    def paginate_queryset(self, queryset):
+        if "all" in self.request.query_params:  # type: ignore
+            return None
+        return super().paginate_queryset(queryset)
 
     def get_serializer_class(self):
         try:
