@@ -1,5 +1,4 @@
 from rest_framework import exceptions, viewsets
-from rest_framework.permissions import AllowAny
 
 from feesprefect.apps.school.mixins import PerformCreateWithAdmin
 from feesprefect.apps.school.models import (
@@ -30,7 +29,6 @@ class StudentViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
     """
 
     queryset = Student.objects.all().order_by("id")
-    permission_classes = (AllowAny,)
     pagination_class = ListPagination
     lookup_field = "uuid"
     # lookup_value_regex = r"^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$" # pylint: disable=line-too-long

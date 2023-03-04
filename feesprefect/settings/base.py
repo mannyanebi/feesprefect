@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "import_export",
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_yasg",
     # feesprefect apps
     "feesprefect.apps.core",
@@ -254,6 +255,9 @@ IMPORT_EXPORT_SKIP_ADMIN_LOG = True
 
 # Rest Framework
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAdminUser",
     ],
