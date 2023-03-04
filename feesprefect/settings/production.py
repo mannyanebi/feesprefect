@@ -14,6 +14,16 @@ from .base import *  # noqa
 # ==============================================================================
 MIDDLEWARE.insert(3, "whitenoise.middleware.WhiteNoiseMiddleware")
 
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "feesprefect.sqlite3",
+    }
+}
+
 # ==============================================================================
 # CONFIG FOR RUNNING ON RENDER.COM
 # ==============================================================================
