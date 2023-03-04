@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "import_export",
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
     "drf_yasg",
     # feesprefect apps
     "feesprefect.apps.core",
@@ -91,16 +92,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "feesprefect.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "feesprefect.sqlite3",
-    }
-}
 
 # ==============================================================================
 # AUTHENTICATION AND AUTHORIZATION SETTINGS
@@ -254,6 +245,9 @@ IMPORT_EXPORT_SKIP_ADMIN_LOG = True
 
 # Rest Framework
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAdminUser",
     ],
