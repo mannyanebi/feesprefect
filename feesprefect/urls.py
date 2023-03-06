@@ -51,6 +51,7 @@ urlpatterns = [
         SchemaView.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
+    path("", include("feesprefect.apps.core.urls", namespace="core")),
     path("api/v1/", include("feesprefect.apps.school.urls", namespace="school")),
     path(
         "api/v1/auth/", include("feesprefect.apps.accounts.urls", namespace="accounts")

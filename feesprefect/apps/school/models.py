@@ -119,6 +119,10 @@ class SchoolFee(TimestampMixin, models.Model):
 
 
 class SchoolFeesPayment(UUIDMixin, TimestampMixin, models.Model):
+    class Meta:
+        verbose_name = "School fees payment"
+        verbose_name_plural = "School fees payments"
+
     student = models.ForeignKey(
         "school.Student",
         verbose_name=_("Student"),
@@ -149,7 +153,3 @@ class SchoolFeesPayment(UUIDMixin, TimestampMixin, models.Model):
 
     def __str__(self):
         return self.student.name
-
-    class Meta:
-        verbose_name = "School fees payment"
-        verbose_name_plural = "School fees payments"
