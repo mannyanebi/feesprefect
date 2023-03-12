@@ -265,6 +265,13 @@ REST_FRAMEWORK = {
     ),
 }
 
+# Swagger UI settings
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+    }
+}
+
 # CORS Policy
 CORS_ALLOW_ALL_ORIGINS = True
 
