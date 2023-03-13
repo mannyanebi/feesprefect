@@ -19,7 +19,7 @@ from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.authentication import BasicAuthentication
 
 SchemaView = get_schema_view(
     openapi.Info(
@@ -29,7 +29,7 @@ SchemaView = get_schema_view(
     ),
     public=True,
     permission_classes=[permissions.IsAdminUser],
-    authentication_classes=[SessionAuthentication, BasicAuthentication],
+    authentication_classes=[BasicAuthentication],
 )
 
 urlpatterns = [
