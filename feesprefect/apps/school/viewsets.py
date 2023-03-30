@@ -55,7 +55,7 @@ class StudentViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
             ) from request_method_error
 
 
-class AcademicClassViewSet(viewsets.ModelViewSet):
+class AcademicClassViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
     """
     The Academic Class ModelViewSet with all CRUD actions. We prefer to use id field for lookup
     """
@@ -92,15 +92,20 @@ class SchoolFeesViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
             ) from request_method_error
 
 
-class SchoolFeesPaymentViewSet(viewsets.ModelViewSet):
+class SchoolFeesPaymentViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
     """
     The School Fees Payment ModelViewSet with all CRUD actions.
     We prefer to use uuid field for lookup
     """
 
-    queryset = SchoolFeesPayment.objects.all().order_by("id")
+    queryset = SchoolFeesPayment.objects.all().order_by("-updated_at")
     pagination_class = ListPagination
     lookup_field = "uuid"
+
+    def paginate_queryset(self, queryset):
+        if "all" in self.request.query_params:  # type: ignore
+            return None
+        return super().paginate_queryset(queryset)
 
     def get_serializer_class(self):
         try:

@@ -42,10 +42,16 @@ class AcademicSessionAdmin(admin.ModelAdmin):
 class SchoolFeeAdmin(admin.ModelAdmin):
     list_display = (
         "academic_class",
-        "session",
-        "term",
+        "session__name",
+        "session__term",
         "amount",
     )
+
+    def session__name(self, obj: models.SchoolFee):
+        return obj.session.name
+
+    def session__term(self, obj: models.SchoolFee):
+        return obj.session.term
 
 
 @admin.register(models.SchoolFeesPayment)

@@ -72,6 +72,7 @@ disable=missing-class-docstring,
         too-many-ancestors,
         too-few-public-methods,
         pointless-string-statement,
+        invalid-str-returned
 
 
 

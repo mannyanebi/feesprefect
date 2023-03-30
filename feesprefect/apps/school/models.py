@@ -99,9 +99,9 @@ class SchoolFee(TimestampMixin, models.Model):
         on_delete=models.CASCADE,
         related_name="school_fees",
     )
-    term = models.CharField(
-        _("Academic Term"), max_length=50, choices=TERM_CHOICES, default=FIRST_TERM
-    )
+    # term = models.CharField(
+    #     _("Academic Term"), max_length=50, choices=TERM_CHOICES, default=FIRST_TERM
+    # )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -111,7 +111,9 @@ class SchoolFee(TimestampMixin, models.Model):
     )
 
     def __str__(self):
-        return f"{self.academic_class.name} {self.session.name}"
+        return (
+            f"{self.academic_class.name} - {self.session.name}  - {self.session.term}"
+        )
 
     class Meta:
         verbose_name = "School fee"
