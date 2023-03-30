@@ -238,10 +238,6 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                 total_amounts_of_previous_payments = previous_payments.aggregate(
                     total_previous_amounts=Sum("amount_paid")
                 )
-                print(
-                    "total_amounts_of_previous_payments",
-                    total_amounts_of_previous_payments,
-                )
                 total_amounts_of_previous_payments = int(
                     total_amounts_of_previous_payments.get("total_previous_amounts", 0)
                 )
@@ -258,14 +254,13 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                                 "is_payment_complete": True,
                             }
                         )
-                    else:
-                        validated_data.update(
-                            {
-                                "student": student_obj,
-                                "school_fee": school_fee_obj,
-                                "is_payment_complete": False,
-                            }
-                        )
+                    validated_data.update(
+                        {
+                            "student": student_obj,
+                            "school_fee": school_fee_obj,
+                            "is_payment_complete": False,
+                        }
+                    )
 
                     school_fee_payment = SchoolFeesPayment.objects.create(
                         **validated_data
@@ -273,7 +268,8 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                     return school_fee_payment
                 else:
                     raise ValidationError(
-                        "The amount paid plus previous amounts is greater than the original school fee amount"
+                        "The amount paid plus previous amounts is greater than the \
+                          original school fee amount"
                     )
             else:
                 # This is the first payment for this student

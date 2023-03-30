@@ -9,7 +9,7 @@
 # def update_school_fee_payment_is_payment_complete_field(
 #     sender, instance: SchoolFeesPayment, **kwargs  # pylint: disable=unused-argument
 # ):
-#     serialized_school_fee_amount = MoneyFieldSerializer(instance.school_fee.amount).data  # type: ignore
+#     serialized_school_fee_amount = MoneyFieldSerializer(instance.school_fee.amount).data  # type: ignore, pylint: disable=line-too-long
 #     original_school_fee_amount = float(serialized_school_fee_amount["amount"])
 
 #     serialized_amount_paid = MoneyFieldSerializer(instance.amount_paid).data
