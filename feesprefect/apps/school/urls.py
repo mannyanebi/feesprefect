@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from feesprefect.apps.school.views import SchoolFeesPayments
 from feesprefect.apps.school.viewsets import (
     AcademicClassViewSet,
     AcademicSessionViewSet,
@@ -19,7 +20,14 @@ router.register(
 )
 router.register(r"school-fees", SchoolFeesViewSet, basename="school-fees")
 router.register(
-    r"school-fees-payment", SchoolFeesPaymentViewSet, basename="school-fees"
+    r"school-fees-payment", SchoolFeesPaymentViewSet, basename="school-fees-payments"
 )
 
-urlpatterns = [path("", include(router.urls))]
+urlpatterns = [
+    path("", include(router.urls)),
+    path(
+        "student-school-fees-payments/<uuid:student_uuid>/<int:academic_class_id>/",
+        SchoolFeesPayments.as_view(),
+        name="student-school-fees-payments",
+    ),
+]

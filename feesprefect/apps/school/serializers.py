@@ -195,6 +195,15 @@ class ReadSchoolFeesPaymentSerializer(serializers.ModelSerializer):
         lookup_field = "uuid"
 
 
+class StudentSchoolFeesPaymentSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    school_fee_name = serializers.CharField()
+    school_fee_amount = MoneyField(max_digits=14, decimal_places=2)
+    payments = serializers.ListField(child=serializers.CharField())
+    is_payment_complete = serializers.BooleanField()
+
+
 class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
     student = WriteStudentFKFieldSerializer()
     amount_paid = MoneyField(max_digits=14, decimal_places=2)
@@ -244,7 +253,7 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                 new_amount_paid = (
                     total_amounts_of_previous_payments + validated_data["amount_paid"]
                 )
-
+                # pylint: disable=no-else-return
                 if new_amount_paid <= school_fee_obj.amount.amount:
                     if new_amount_paid == school_fee_obj.amount.amount:
                         validated_data.update(
@@ -254,13 +263,14 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                                 "is_payment_complete": True,
                             }
                         )
-                    validated_data.update(
-                        {
-                            "student": student_obj,
-                            "school_fee": school_fee_obj,
-                            "is_payment_complete": False,
-                        }
-                    )
+                    else:
+                        validated_data.update(
+                            {
+                                "student": student_obj,
+                                "school_fee": school_fee_obj,
+                                "is_payment_complete": False,
+                            }
+                        )
 
                     school_fee_payment = SchoolFeesPayment.objects.create(
                         **validated_data

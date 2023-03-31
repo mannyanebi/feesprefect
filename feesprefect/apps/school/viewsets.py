@@ -101,6 +101,8 @@ class SchoolFeesPaymentViewSet(PerformCreateWithAdmin, viewsets.ModelViewSet):
     queryset = SchoolFeesPayment.objects.all().order_by("-updated_at")
     pagination_class = ListPagination
     lookup_field = "uuid"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["student__uuid", "school_fee_id"]
 
     def paginate_queryset(self, queryset):
         if "all" in self.request.query_params:  # type: ignore
