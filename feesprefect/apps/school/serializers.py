@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from djmoney.contrib.django_rest_framework import MoneyField
 from rest_framework import serializers
 from rest_framework.exceptions import APIException, NotFound, ValidationError
@@ -159,7 +160,6 @@ class WriteSchoolFeeFKFieldSerializer(serializers.ModelSerializer):
             "amount",
             "academic_class",
             "session",
-            "term",
             "created_by",
             "created_at",
             "updated_at",
@@ -195,16 +195,25 @@ class ReadSchoolFeesPaymentSerializer(serializers.ModelSerializer):
         lookup_field = "uuid"
 
 
+class StudentSchoolFeesPaymentSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    school_fee_name = serializers.CharField()
+    school_fee_amount = MoneyField(max_digits=14, decimal_places=2)
+    payments = serializers.ListField(child=serializers.CharField())
+    is_payment_complete = serializers.BooleanField()
+
+
 class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
     student = WriteStudentFKFieldSerializer()
     amount_paid = MoneyField(max_digits=14, decimal_places=2)
-    # school_fee = WriteSchoolFeeFKFieldSerializer()
+    school_fee = WriteSchoolFeeFKFieldSerializer()
 
     class Meta:
         model = SchoolFeesPayment
         exclude = (
             "uuid",
-            "school_fee",
+            # "school_fee",
             "is_payment_complete",
             "created_by",
             "created_at",
@@ -216,15 +225,70 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         try:
             student = validated_data.pop("student")
+            school_fee = validated_data.pop("school_fee")
             student_obj = Student.objects.select_related("academic_class").get(
                 uuid=student["uuid"]
             )
-            school_fee = student_obj.academic_class.school_fees.get(
-                academic_class_id=student_obj.academic_class.id
+            school_fee_obj = SchoolFee.objects.get(
+                id=school_fee["id"], academic_class_id=student_obj.academic_class.id
             )
-            validated_data.update({"student": student_obj, "school_fee": school_fee})
-            school_fee_payment = SchoolFeesPayment.objects.create(**validated_data)
-            return school_fee_payment
+
+            # We want to check if a previous payment has been made for this student
+            # and if so, we want to get the previous amounts paid, add the new amount
+            # and check if the new total is less than or equal to the school fee amount
+            # we want to return is_payment_complete as true
+
+            previous_payments = SchoolFeesPayment.objects.filter(
+                student_id=student_obj.id,  # type: ignore
+                school_fee_id=school_fee["id"],  # type: ignore
+            ).order_by("-created_at")
+
+            if previous_payments.exists():
+                total_amounts_of_previous_payments = previous_payments.aggregate(
+                    total_previous_amounts=Sum("amount_paid")
+                )
+                total_amounts_of_previous_payments = int(
+                    total_amounts_of_previous_payments.get("total_previous_amounts", 0)
+                )
+                new_amount_paid = (
+                    total_amounts_of_previous_payments + validated_data["amount_paid"]
+                )
+                # pylint: disable=no-else-return
+                if new_amount_paid <= school_fee_obj.amount.amount:
+                    if new_amount_paid == school_fee_obj.amount.amount:
+                        validated_data.update(
+                            {
+                                "student": student_obj,
+                                "school_fee": school_fee_obj,
+                                "is_payment_complete": True,
+                            }
+                        )
+                    else:
+                        validated_data.update(
+                            {
+                                "student": student_obj,
+                                "school_fee": school_fee_obj,
+                                "is_payment_complete": False,
+                            }
+                        )
+
+                    school_fee_payment = SchoolFeesPayment.objects.create(
+                        **validated_data
+                    )
+                    return school_fee_payment
+                else:
+                    raise ValidationError(
+                        "The amount paid plus previous amounts is greater than the \
+                          original school fee amount"
+                    )
+            else:
+                # This is the first payment for this student
+                validated_data.update(
+                    {"student": student_obj, "school_fee": school_fee_obj}
+                )
+
+                school_fee_payment = SchoolFeesPayment.objects.create(**validated_data)
+                return school_fee_payment
         except Student.DoesNotExist as student_not_found:
             raise NotFound("Student not found") from student_not_found
 
