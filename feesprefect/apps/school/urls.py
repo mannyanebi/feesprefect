@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from feesprefect.apps.school.views import SchoolFeesPayments
+from feesprefect.apps.school.views import AdminStudentsAPI, SchoolFeesPaymentsAPI
 from feesprefect.apps.school.viewsets import (
     AcademicClassViewSet,
     AcademicSessionViewSet,
@@ -27,7 +27,12 @@ urlpatterns = [
     path("", include(router.urls)),
     path(
         "student-school-fees-payments/<uuid:student_uuid>/<int:academic_class_id>/",
-        SchoolFeesPayments.as_view(),
+        SchoolFeesPaymentsAPI.as_view(),
         name="student-school-fees-payments",
+    ),
+    path(
+        "students-admin-actions/",
+        AdminStudentsAPI.as_view(),
+        name="students-admin-actions",
     ),
 ]

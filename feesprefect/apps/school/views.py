@@ -1,15 +1,19 @@
 # Create your views here.
+from django.http import Http404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from feesprefect.apps.school.models import SchoolFeesPayment
-from feesprefect.apps.school.serializers import StudentSchoolFeesPaymentSerializer
+from feesprefect.apps.school.models import SchoolFeesPayment, Student
+from feesprefect.apps.school.serializers import (
+    StudentSchoolFeesPaymentSerializer,
+    UpdateStudentActiveFieldSerializer,
+)
 from feesprefect.apps.school.services import sort_and_group_payments_by_school_fees
 
 
-class SchoolFeesPayments(APIView):
+class SchoolFeesPaymentsAPI(APIView):
     """
     Custom endpoints for school fees payments
     """
@@ -24,7 +28,7 @@ class SchoolFeesPayments(APIView):
             status.HTTP_404_NOT_FOUND: "Not Found",
             status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal Server Error",
         },
-        tags=["Get Student School Fees Payments for an Academic Class"],
+        tags=["student-school-fees-payments"],
     )
     # def validate_query_params(self, request):
     #     if request.method == "GET":
@@ -60,4 +64,53 @@ class SchoolFeesPayments(APIView):
         return Response(
             {"message": "Success", "errors": None, "data": serializer.data},
             status=status.HTTP_200_OK,
+        )
+
+
+class AdminStudentsAPI(APIView):  # type: ignore
+    """
+    Custom endpoints for students
+    """
+
+    def get_object(
+        self, student_uuid: str
+    ):  # pylint: disable=missing-function-docstring, no-self-use
+        try:
+            return Student.objects.get(uuid=student_uuid)
+        except Student.DoesNotExist as student_exc:
+            raise Http404 from student_exc
+
+    @swagger_auto_schema(
+        description="Update a student information, 'active' field",
+        request_body=UpdateStudentActiveFieldSerializer(),
+        responses={
+            status.HTTP_200_OK: UpdateStudentActiveFieldSerializer(),
+            status.HTTP_400_BAD_REQUEST: "Bad Request",
+            status.HTTP_401_UNAUTHORIZED: "Unauthorized",
+            status.HTTP_403_FORBIDDEN: "Forbidden",
+            status.HTTP_404_NOT_FOUND: "Not Found",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal Server Error",
+        },
+        tags=["admin-student-actions"],
+        operation_description="Update a student information, 'active' field",
+    )
+    def post(
+        self, request, format=None
+    ):  # pylint: disable=unused-argument, redefined-builtin
+        """
+        Update a student information, 'active' field
+        """
+        serializer = UpdateStudentActiveFieldSerializer(data=request.data)
+        if serializer.is_valid():
+            student_uuid = serializer.validated_data["uuid"]  # pyright: ignore
+            student = self.get_object(student_uuid)
+            student.active = serializer.validated_data["active"]  # pyright: ignore
+            student.save()
+            return Response(
+                {"message": "Success", "errors": None, "data": serializer.data},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"message": "Bad Request", "errors": serializer.errors, "data": None},
+            status=status.HTTP_400_BAD_REQUEST,
         )

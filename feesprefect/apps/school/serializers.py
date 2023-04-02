@@ -89,6 +89,17 @@ class WriteStudentFKFieldSerializer(serializers.ModelSerializer):
         extra_kwargs = {"uuid": {"read_only": False}}
 
 
+class UpdateStudentActiveFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = (
+            "uuid",
+            "active",
+        )
+
+        extra_kwargs = {"uuid": {"read_only": False}}
+
+
 class AcademicSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AcademicSession
