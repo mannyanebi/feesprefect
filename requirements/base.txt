@@ -20,3 +20,4 @@ python-decouple==3.7
 whitenoise==6.3.0
 Brotli==1.0.9
 django-cors-headers==3.13.0
+djangorestframework-stubs==1.10.0

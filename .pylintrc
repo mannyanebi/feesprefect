@@ -31,6 +31,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
+; load-plugins=pylint_django, mypy_django_plugin.main, mypy_drf_plugin.main  # new!
 load-plugins=pylint_django
 
 # Django Settings Module

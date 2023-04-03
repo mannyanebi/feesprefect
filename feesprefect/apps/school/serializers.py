@@ -34,6 +34,13 @@ class WriteAcademicClassFKFieldSerializer(serializers.ModelSerializer):
         extra_kwargs = {"id": {"read_only": False, "required": False}}
 
 
+class PromoteStudentsInAcademicClassSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    previous_academic_class_id = serializers.CharField()
+    new_academic_class_id = serializers.CharField()
+
+
 class ReadStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -51,6 +58,7 @@ class WriteStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         exclude = (
+            "active",
             "created_by",
             "created_at",
             "updated_at",
@@ -82,8 +90,20 @@ class WriteStudentFKFieldSerializer(serializers.ModelSerializer):
         exclude = (
             "id",
             "name",
+            "active",
             "academic_class",
             "created_by",
+        )
+
+        extra_kwargs = {"uuid": {"read_only": False}}
+
+
+class UpdateStudentActiveFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = (
+            "uuid",
+            "active",
         )
 
         extra_kwargs = {"uuid": {"read_only": False}}
@@ -204,6 +224,13 @@ class StudentSchoolFeesPaymentSerializer(
     is_payment_complete = serializers.BooleanField()
 
 
+class StudentSchoolFeesPaymentsByAcademicClassSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    academic_class_name = serializers.CharField()
+    payments = serializers.ListField(child=StudentSchoolFeesPaymentSerializer())
+
+
 class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
     student = WriteStudentFKFieldSerializer()
     amount_paid = MoneyField(max_digits=14, decimal_places=2)
@@ -229,9 +256,7 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
             student_obj = Student.objects.select_related("academic_class").get(
                 uuid=student["uuid"]
             )
-            school_fee_obj = SchoolFee.objects.get(
-                id=school_fee["id"], academic_class_id=student_obj.academic_class.id
-            )
+            school_fee_obj = SchoolFee.objects.get(id=school_fee["id"])
 
             # We want to check if a previous payment has been made for this student
             # and if so, we want to get the previous amounts paid, add the new amount

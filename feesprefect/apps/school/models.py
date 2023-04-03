@@ -17,6 +17,9 @@ class Student(UUIDMixin, TimestampMixin, models.Model):
         on_delete=models.CASCADE,
         related_name="students",
     )
+    active = models.BooleanField(
+        _("Active"), default=True, help_text="Is the student active?"
+    )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
