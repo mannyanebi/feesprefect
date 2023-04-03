@@ -58,6 +58,7 @@ class WriteStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         exclude = (
+            "active",
             "created_by",
             "created_at",
             "updated_at",
@@ -89,6 +90,7 @@ class WriteStudentFKFieldSerializer(serializers.ModelSerializer):
         exclude = (
             "id",
             "name",
+            "active",
             "academic_class",
             "created_by",
         )
@@ -254,9 +256,7 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
             student_obj = Student.objects.select_related("academic_class").get(
                 uuid=student["uuid"]
             )
-            school_fee_obj = SchoolFee.objects.get(
-                id=school_fee["id"], academic_class_id=student_obj.academic_class.id
-            )
+            school_fee_obj = SchoolFee.objects.get(id=school_fee["id"])
 
             # We want to check if a previous payment has been made for this student
             # and if so, we want to get the previous amounts paid, add the new amount

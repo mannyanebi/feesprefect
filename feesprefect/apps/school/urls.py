@@ -30,7 +30,7 @@ router.register(
 urlpatterns = [
     path("", include(router.urls)),
     path(
-        "student-school-fees-payments/<uuid:student_uuid>/<int:academic_class_id>/",
+        "student-school-fees-payments/<uuid:student_uuid>/",
         AdminSchoolFeesPaymentsAPI.as_view(),  # pyright: ignore
         name="student-school-fees-payments",
     ),

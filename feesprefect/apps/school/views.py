@@ -43,7 +43,7 @@ class AdminSchoolFeesPaymentsAPI(APIView):
     #         )
 
     def get(
-        self, request, student_uuid, academic_class_id, format=None
+        self, request, student_uuid, format=None
     ):  # pylint: disable=unused-argument, redefined-builtin
         """
         Get a student's school fees payments for an academic class
@@ -53,7 +53,7 @@ class AdminSchoolFeesPaymentsAPI(APIView):
         # academic_class_id = request.query_params.get("academic_class_id", None)
 
         student_school_fees_payments = SchoolFeesPayment.objects.filter(
-            student__uuid=student_uuid, school_fee__academic_class_id=academic_class_id
+            student__uuid=student_uuid
         ).order_by("-payment_date")
         sorted_and_grouped_school_fees = sort_and_group_payments_by_school_fees(
             student_school_fees_payments
