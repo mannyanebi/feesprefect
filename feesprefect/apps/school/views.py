@@ -151,7 +151,7 @@ class AdminAcademicClassesAPI(APIView):  # type: ignore
                 "new_academic_class_id"
             ]  # pyright: ignore
             students_in_previous_academic_class = Student.objects.filter(
-                academic_class_id=previous_academic_class_id
+                academic_class_id=previous_academic_class_id, active=True
             )
 
             students_in_previous_academic_class.update(
