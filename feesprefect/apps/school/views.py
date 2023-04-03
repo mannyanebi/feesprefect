@@ -7,13 +7,14 @@ from rest_framework.views import APIView
 
 from feesprefect.apps.school.models import SchoolFeesPayment, Student
 from feesprefect.apps.school.serializers import (
-    StudentSchoolFeesPaymentSerializer,
+    PromoteStudentsInAcademicClassSerializer,
+    StudentSchoolFeesPaymentsByAcademicClassSerializer,
     UpdateStudentActiveFieldSerializer,
 )
 from feesprefect.apps.school.services import sort_and_group_payments_by_school_fees
 
 
-class SchoolFeesPaymentsAPI(APIView):
+class AdminSchoolFeesPaymentsAPI(APIView):
     """
     Custom endpoints for school fees payments
     """
@@ -57,7 +58,7 @@ class SchoolFeesPaymentsAPI(APIView):
         sorted_and_grouped_school_fees = sort_and_group_payments_by_school_fees(
             student_school_fees_payments
         )
-        serializer = StudentSchoolFeesPaymentSerializer(
+        serializer = StudentSchoolFeesPaymentsByAcademicClassSerializer(
             sorted_and_grouped_school_fees, many=True
         )
 
@@ -108,6 +109,56 @@ class AdminStudentsAPI(APIView):  # type: ignore
             student.save()
             return Response(
                 {"message": "Success", "errors": None, "data": serializer.data},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"message": "Bad Request", "errors": serializer.errors, "data": None},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class AdminAcademicClassesAPI(APIView):  # type: ignore
+    """
+    Custom endpoints for academic classes
+    """
+
+    @swagger_auto_schema(
+        description="Promote students in an academic class to a new academic class",
+        request_body=PromoteStudentsInAcademicClassSerializer(),
+        responses={
+            status.HTTP_200_OK: "None",
+            status.HTTP_400_BAD_REQUEST: "Bad Request",
+            status.HTTP_401_UNAUTHORIZED: "Unauthorized",
+            status.HTTP_403_FORBIDDEN: "Forbidden",
+            status.HTTP_404_NOT_FOUND: "Not Found",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal Server Error",
+        },
+        tags=["admin-academic-class-actions"],
+        operation_description="Promote students in an academic class to a new academic class",
+    )
+    def post(
+        self, request, format=None
+    ):  # pylint: disable=unused-argument, redefined-builtin
+        """
+        Update a student information, 'active' field
+        """
+        serializer = PromoteStudentsInAcademicClassSerializer(data=request.data)
+        if serializer.is_valid():
+            previous_academic_class_id = serializer.validated_data[
+                "previous_academic_class_id"
+            ]  # pyright: ignore
+            new_academic_class_id = serializer.validated_data[
+                "new_academic_class_id"
+            ]  # pyright: ignore
+            students_in_previous_academic_class = Student.objects.filter(
+                academic_class_id=previous_academic_class_id
+            )
+
+            students_in_previous_academic_class.update(
+                academic_class_id=new_academic_class_id
+            )
+            return Response(
+                {"message": "Success", "errors": None, "data": None},
                 status=status.HTTP_200_OK,
             )
         return Response(

@@ -34,6 +34,13 @@ class WriteAcademicClassFKFieldSerializer(serializers.ModelSerializer):
         extra_kwargs = {"id": {"read_only": False, "required": False}}
 
 
+class PromoteStudentsInAcademicClassSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    previous_academic_class_id = serializers.CharField()
+    new_academic_class_id = serializers.CharField()
+
+
 class ReadStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -213,6 +220,13 @@ class StudentSchoolFeesPaymentSerializer(
     school_fee_amount = MoneyField(max_digits=14, decimal_places=2)
     payments = serializers.ListField(child=serializers.CharField())
     is_payment_complete = serializers.BooleanField()
+
+
+class StudentSchoolFeesPaymentsByAcademicClassSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    academic_class_name = serializers.CharField()
+    payments = serializers.ListField(child=StudentSchoolFeesPaymentSerializer())
 
 
 class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
