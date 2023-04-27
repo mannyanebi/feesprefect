@@ -11,6 +11,14 @@ from feesprefect.apps.core.models import TimestampMixin, UUIDMixin
 
 class Student(UUIDMixin, TimestampMixin, models.Model):
     name = models.CharField(_("Student Name"), max_length=255, blank=False, null=False)
+    date_of_birth = models.DateField(_("Date of Birth"), blank=True, null=True)
+    name_of_guardian = models.CharField(
+        _("Name of Parent/Guardian"), max_length=255, blank=True, null=True
+    )
+    phone_number_of_guardian = models.CharField(
+        _("Phone Number of Parent/Guardian"), max_length=255, blank=True, null=True
+    )
+    home_address = models.TextField(_("Home Address"), blank=True, null=True)
     academic_class = models.ForeignKey(
         "school.AcademicClass",
         verbose_name=_("Academic Class"),

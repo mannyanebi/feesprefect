@@ -70,12 +70,26 @@ class WriteStudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # hook and intercept the validated_data to fetch the Academic Class model object
         try:
-
             academic_class = validated_data.pop("academic_class")
             academic_class_obj = AcademicClass.objects.get(id=academic_class.get("id"))
             instance = Student.objects.create(
                 academic_class=academic_class_obj, **validated_data
             )
+            return instance
+
+        except AcademicClass.DoesNotExist as does_not_exist:
+            raise serializers.ValidationError(
+                {"academic_class": "Invalid academic_class Id"}
+            ) from does_not_exist
+
+    def update(self, instance: Student, validated_data):
+        try:
+            academic_class = validated_data.pop("academic_class")
+            academic_class_obj = AcademicClass.objects.get(id=academic_class.get("id"))
+            instance.academic_class = academic_class_obj
+            for field in validated_data:
+                setattr(instance, field, validated_data.get(field))
+            instance.save()
             return instance
 
         except AcademicClass.DoesNotExist as does_not_exist:
@@ -148,7 +162,6 @@ class WriteSchoolFeeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # hook and intercept the validated_data to fetch the Academic Class model object
         try:
-
             academic_class = validated_data.pop("academic_class")
             academic_session = validated_data.pop("session")
             academic_class_obj = AcademicClass.objects.get(id=academic_class.get("id"))
