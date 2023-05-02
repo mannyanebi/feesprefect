@@ -87,7 +87,7 @@ class AcademicSession(TimestampMixin, models.Model):
     )
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} - {self.term}"
 
     class Meta:
         verbose_name = "Academic session"
