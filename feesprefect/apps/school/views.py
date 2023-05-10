@@ -5,9 +5,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from feesprefect.apps.school.models import SchoolFeesPayment, Student
+from feesprefect.apps.school.models import AcademicClass, SchoolFeesPayment, Student
 from feesprefect.apps.school.serializers import (
     PromoteStudentsInAcademicClassSerializer,
+    SchoolStatisticsSerializer,
     StudentSchoolFeesPaymentsByAcademicClassSerializer,
     UpdateStudentActiveFieldSerializer,
 )
@@ -164,4 +165,46 @@ class AdminAcademicClassesAPI(APIView):  # type: ignore
         return Response(
             {"message": "Bad Request", "errors": serializer.errors, "data": None},
             status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class AdminSchoolStatisticsAPI(APIView):
+    """
+    Custom endpoints for school fees payments
+    """
+
+    @swagger_auto_schema(
+        operation_description="Gets statistics of students, classes and school fees payments",
+        responses={
+            status.HTTP_200_OK: "Success",
+            status.HTTP_400_BAD_REQUEST: "Bad Request",
+            status.HTTP_401_UNAUTHORIZED: "Unauthorized",
+            status.HTTP_403_FORBIDDEN: "Forbidden",
+            status.HTTP_404_NOT_FOUND: "Not Found",
+            status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal Server Error",
+        },
+        tags=["school-statistics"],
+    )
+    def get(
+        self, request, format=None
+    ):  # pylint: disable=unused-argument, redefined-builtin
+        """
+        Gets statistics of students, classes and school fees payments
+        """
+
+        students_count = Student.objects.filter(active=True).count()
+        academic_classes_count = AcademicClass.objects.all().count()
+        school_fees_payments_count = SchoolFeesPayment.objects.all().count()
+
+        serializer = SchoolStatisticsSerializer(
+            {
+                "students_count": students_count,
+                "academic_classes_count": academic_classes_count,
+                "school_fees_payments_count": school_fees_payments_count,
+            }
+        )
+
+        return Response(
+            {"message": "Success", "errors": None, "data": serializer.data},
+            status=status.HTTP_200_OK,
         )

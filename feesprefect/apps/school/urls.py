@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from feesprefect.apps.school.views import (
     AdminAcademicClassesAPI,
     AdminSchoolFeesPaymentsAPI,
+    AdminSchoolStatisticsAPI,
     AdminStudentsAPI,
 )
 from feesprefect.apps.school.viewsets import (
@@ -43,5 +44,10 @@ urlpatterns = [
         "academic-class-admin-actions/",
         AdminAcademicClassesAPI.as_view(),  # pyright: ignore
         name="students-admin-actions",
+    ),
+    path(
+        "school-statistics/",
+        AdminSchoolStatisticsAPI.as_view(),  # pyright: ignore
+        name="school-statistics",
     ),
 ]

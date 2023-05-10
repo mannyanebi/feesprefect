@@ -2,9 +2,6 @@
 
 import os
 
-import dj_database_url
-from decouple import config
-
 from .base import *  # noqa, pylint: disable=wildcard-import, unused-wildcard-import
 
 # ==============================================================================
@@ -26,17 +23,6 @@ MIDDLEWARE.insert(3, "whitenoise.middleware.WhiteNoiseMiddleware")
 #         "NAME": BASE_DIR / "feesprefect.sqlite3",
 #     }
 # }
-
-DB_NAME = config("DB_NAME")
-DB_USER = config("DB_USER")
-DB_PASSWORD = config("DB_PASSWORD")
-DB_HOST = config("DB_HOST")
-
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-    )
-}
 
 # ==============================================================================
 # CONFIG FOR RUNNING ON RENDER.COM
