@@ -348,3 +348,11 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
             )
 
         return super().update(instance, validated_data)
+
+
+class SchoolStatisticsSerializer(
+    serializers.Serializer
+):  # pylint: disable=abstract-method
+    students_count = serializers.IntegerField()
+    academic_classes_count = serializers.IntegerField()
+    school_fees_payments_count = serializers.IntegerField()

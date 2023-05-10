@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from typing import List, cast
 
+import dj_database_url
 from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -282,3 +283,19 @@ CORS_ALLOW_ALL_ORIGINS = True
 # FEESPREFECT_ENVIRONMENT = config("FEESPREFECT_ENVIRONMENT", default="local")
 
 AUTH_USER_MODEL = "accounts.FeesprefectAdmin"
+
+# =============================================================================
+# DATABASE
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# =============================================================================
+
+DB_NAME = config("DB_NAME")
+DB_USER = config("DB_USER")
+DB_PASSWORD = config("DB_PASSWORD")
+DB_HOST = config("DB_HOST")
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    )
+}
