@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn feesprefect.wsgi:application"
+    startCommand: "gunicorn feesprefect.wsgi:application --timeout 300"
     envVars:
       - key: FEESPREFECT_ENVIRONMENT
         value: production
