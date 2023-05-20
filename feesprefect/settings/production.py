@@ -28,7 +28,7 @@ MIDDLEWARE.insert(3, "whitenoise.middleware.WhiteNoiseMiddleware")
 # CONFIG FOR RUNNING ON RENDER.COM
 # ==============================================================================
 
-ALLOWED_HOSTS: List[str] = []
+# ALLOWED_HOSTS: List[str] = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
