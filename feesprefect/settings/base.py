@@ -296,6 +296,7 @@ DB_HOST = config("DB_HOST")
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+        default=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}",
+        conn_max_age=600,
     )
 }
