@@ -140,7 +140,9 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATIC_ROOT = BASE_DIR.parent.parent / "staticfiles"
+print("BASE_DIR: ", BASE_DIR)
+
+STATIC_ROOT = BASE_DIR.parent / "staticfiles"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
