@@ -334,18 +334,22 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
         if "student" in validated_data:
             raise ValidationError("You can't update the student field for this record")
         amount_paid = validated_data.pop("amount_paid")
-
-        school_fee: SchoolFee = instance.student.academic_class.school_fees.get(
-            academic_class_id=instance.student.academic_class.id
-        )
-        new_amount_paid = instance.amount_paid.amount + amount_paid
-
-        if new_amount_paid <= school_fee.amount.amount:
-            instance.amount_paid = new_amount_paid
-        else:
-            raise APIException(
-                detail="New total amount paid cannot be more than school fee total amount"
+        school_fee_dict = validated_data.pop("school_fee")
+        try:
+            school_fee_obj: SchoolFee = instance.student.academic_class.school_fees.get(
+                id=school_fee_dict["id"]
             )
+
+            if amount_paid <= school_fee_obj.amount.amount:
+                instance.amount_paid = amount_paid
+                if amount_paid == school_fee_obj.amount.amount:
+                    instance.is_payment_complete = True
+            else:
+                raise APIException(
+                    detail="New total amount paid cannot be more than school fee total amount"
+                )
+        except SchoolFee.DoesNotExist as school_fee_not_found:
+            raise NotFound("School fee not found") from school_fee_not_found
 
         return super().update(instance, validated_data)
 
