@@ -42,6 +42,7 @@ ALLOWED_HOSTS: List[str] = cast(
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -140,7 +141,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATIC_ROOT = BASE_DIR.parent / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
@@ -148,7 +149,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 if not DEBUG:
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    STATICFILES_STORAGE = (
+        "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+    )
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -176,7 +179,7 @@ JAZZMIN_SETTINGS = {
     "site_title": "FeesPrefect | Delight Favourite Nursery and Primary School",
     "site_header": "FeesPrefect",
     "site_brand": "FeesPrefect",
-    "site_icon": "images/favicon.png",
+    "site_icon": "img/feesprefect-logo.png",
     # Add your own branding here
     "site_logo": None,
     "welcome_sign": "Welcome to the FeesPrefect Admin",
