@@ -42,7 +42,6 @@ ALLOWED_HOSTS: List[str] = cast(
 # Application definition
 
 INSTALLED_APPS = [
-    # "whitenoise.runserver_nostatic",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -169,7 +168,7 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR.parent.parent / "media"
+MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

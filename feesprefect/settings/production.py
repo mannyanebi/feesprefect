@@ -12,7 +12,7 @@ from .base import *  # noqa, pylint: disable=wildcard-import, unused-wildcard-im
 # ==============================================================================
 # Config for Serving Static Files
 # ==============================================================================
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(3, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
