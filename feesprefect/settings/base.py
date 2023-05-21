@@ -141,6 +141,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR.parent / "staticfiles"
+STATIC_ROOT.mkdir(exist_ok=True)
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
