@@ -138,18 +138,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+
+# Build output location where Django collects all static files
 STATIC_URL = "/static/"
 
+# URL to use when referring to static files located in STATIC_ROOT.
 STATIC_ROOT = BASE_DIR.parent / "staticfiles"
 STATIC_ROOT.mkdir(exist_ok=True)
 
+# Source location where we'll store our static files
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -162,7 +168,7 @@ STATICFILES_FINDERS = (
 
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR.parent.parent / "media"
+MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -177,7 +183,7 @@ JAZZMIN_SETTINGS = {
     "site_title": "FeesPrefect | Delight Favourite Nursery and Primary School",
     "site_header": "FeesPrefect",
     "site_brand": "FeesPrefect",
-    "site_icon": "images/favicon.png",
+    "site_icon": "img/feesprefect-logo.png",
     # Add your own branding here
     "site_logo": None,
     "welcome_sign": "Welcome to the FeesPrefect Admin",
