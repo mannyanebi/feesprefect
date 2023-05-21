@@ -139,19 +139,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+
+# Build output location where Django collects all static files
 STATIC_URL = "/static/"
 
+# URL to use when referring to static files located in STATIC_ROOT.
 STATIC_ROOT = BASE_DIR.parent / "staticfiles"
+STATIC_ROOT.mkdir(exist_ok=True)
 
+# Source location where we'll store our static files
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = (
-        "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-    )
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
