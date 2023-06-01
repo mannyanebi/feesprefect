@@ -293,7 +293,15 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                 )
                 # pylint: disable=no-else-return
                 if new_amount_paid <= school_fee_obj.amount.amount:
+                    print("new_amount_paid", new_amount_paid)
+                    print("type new_amount_paid", type(new_amount_paid))
+                    print("school_fee_obj.amount.amount", school_fee_obj.amount.amount)
+                    print(
+                        "type school_fee_obj.amount.amount",
+                        type(school_fee_obj.amount.amount),
+                    )
                     if new_amount_paid == school_fee_obj.amount.amount:
+                        print("new_amount_paid == school_fee_obj.amount.amount")
                         validated_data.update(
                             {
                                 "student": student_obj,
@@ -324,6 +332,14 @@ class WriteSchoolFeesPaymentSerializer(serializers.ModelSerializer):
                 validated_data.update(
                     {"student": student_obj, "school_fee": school_fee_obj}
                 )
+
+                amount_paid = validated_data["amount_paid"]
+                if amount_paid == school_fee_obj.amount.amount:
+                    validated_data.update({"is_payment_complete": True})
+                elif amount_paid > school_fee_obj.amount.amount:
+                    raise ValidationError(
+                        "The amount paid is greater than the original school fee amount"
+                    )
 
                 school_fee_payment = SchoolFeesPayment.objects.create(**validated_data)
                 return school_fee_payment
