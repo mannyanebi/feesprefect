@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db.models import Sum
 from django.http import Http404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -194,13 +195,17 @@ class AdminSchoolStatisticsAPI(APIView):
 
         students_count = Student.objects.filter(active=True).count()
         academic_classes_count = AcademicClass.objects.all().count()
-        school_fees_payments_count = SchoolFeesPayment.objects.all().count()
+        total_school_fees_payments: dict = SchoolFeesPayment.objects.aggregate(
+            Sum("amount_paid")
+        )
 
         serializer = SchoolStatisticsSerializer(
             {
                 "students_count": students_count,
                 "academic_classes_count": academic_classes_count,
-                "school_fees_payments_count": school_fees_payments_count,
+                "school_fees_payments_count": total_school_fees_payments[
+                    "amount_paid__sum"
+                ],
             }
         )
 
