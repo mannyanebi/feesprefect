@@ -38,7 +38,7 @@ def sort_and_group_payments_by_school_fees(
                             "school_fee_name": f"{school_fee.session.name}  - {school_fee.session.term}",  # pylint: disable=line-too-long
                             "school_fee_amount": school_fee.amount,
                             "payments": payments_for_school_fee.values_list(
-                                "amount_paid", flat=True
+                                "amount_paid", "is_registration_fee_payment", named=True
                             ),
                             "is_payment_complete": any(
                                 payment_for_school_fee.is_payment_complete
@@ -48,5 +48,4 @@ def sort_and_group_payments_by_school_fees(
                     ],
                 }
             )
-
     return school_fees_payments_details

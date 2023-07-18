@@ -153,6 +153,9 @@ class SchoolFeesPayment(UUIDMixin, TimestampMixin, models.Model):
         related_name="payments",
     )
     is_payment_complete = models.BooleanField(_("Is Payment Completed?"), default=False)
+    is_registration_fee_payment = models.BooleanField(
+        _("Is Registration Fee Payment?"), default=False
+    )
     payment_date = models.DateField(
         _("Payment Date"), auto_now=True, auto_now_add=False
     )
